@@ -9,7 +9,7 @@ Bubble_Sort (int arrray[], int size)
   for (int i = 0; i < size; i++)
     {
       bool flag = true;
-      for (int j = 1; j < size; j++)
+      for (int j = 1; j < size-i; j++)
         {
           if (arrray[j] > arrray[j - 1])
             {
