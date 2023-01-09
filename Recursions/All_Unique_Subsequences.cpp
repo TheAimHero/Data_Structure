@@ -6,7 +6,7 @@ class solution
 public:
     void subsets(vector<int> ip, vector<int> temp, vector<vector<int>> *ans, int index)
     {
-        // if (index == ip.size())
+        if (index == ip.size())
         {
             ans->push_back(temp);
         }

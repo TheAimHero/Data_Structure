@@ -1,0 +1,7 @@
+Connected Components
+  A graph can contain many nodes which are not connected to every other node in
+  the graph. This does not mean that these nodes are not the part of the graph.
+  Therefore we have to make sure to traverse the entire graph. For this purpose
+  we use a visited array. The visited array contain a log of the nodes which has
+  been visited.
+
