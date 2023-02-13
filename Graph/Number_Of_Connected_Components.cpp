@@ -4,7 +4,7 @@
 
 using namespace std;
 
-void DFS(vector<vector<int>> store, vector<vector<int>>& visited, int row, int col)
+void DFS(vector<vector<int>> store, vector<vector<int>> &visited, int row, int col)
 {
   visited[row][col] = 1;
   for (int d_row = -1; d_row <= 1; d_row++)
@@ -23,9 +23,18 @@ void DFS(vector<vector<int>> store, vector<vector<int>>& visited, int row, int c
 
 int main()
 {
-  vector<vector<int>> store = { { 0, 1, 1, 0 }, { 0, 1, 1, 0 }, { 0, 0, 1, 0 }, { 0, 0, 0, 0 }, { 1, 1, 1, 1 } };
+  vector<vector<int>> store = {{0, 1, 1, 0}, {0, 1, 1, 0}, {0, 0, 1, 0}, {0, 0, 0, 0}, {1, 1, 1, 1}};
   vector<vector<int>> visited(store.size(), vector<int>(store[0].size(), 0));
   int count{};
+  for (auto i : store)
+  {
+    for (auto j : i)
+    {
+      cout << j << " ";
+    }
+    cout << "\n";
+  }
+  cout << "\n\n";
   for (int i = 0; i < store.size(); i++)
   {
     for (int j = 0; j < store[0].size(); j++)
