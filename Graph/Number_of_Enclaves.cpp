@@ -1,70 +1,99 @@
-#include <iostream>
+#include <bits/stdc++.h>
 #include <queue>
 #include <utility>
 #include <vector>
+using namespace std;
 
-int Enclaves(std::vector<std::vector<int>> store)
+// 4 4
+// 0 0 0 0
+// 1 0 1 0
+// 0 1 1 0
+// 0 0 0 0
+
+class Solution
 {
-  int ini_row = store.size(), ini_col = store[0].size();
-  std::vector<std::vector<int>> visited(ini_row, std::vector<int>(ini_col, 0));
-  std::queue<std::pair<int, int>> q;
-  int arr_row[]{ -1, 0, +1, 0 }, arr_col[]{ 0, +1, 0, -1 }, count{};
-  for (int row = 0; row < ini_row; row++)
+  public:
+  void BFS(vector<vector<int>>& grid, vector<vector<int>>& visited, queue<pair<int, int>> q)
   {
-    if (store[row][0])
+    int arr_row[]{ -1, 0, 1, 0 }, arr_col[]{ 0, 1, 0, -1 };  // template array to traverse all 4 direction around a element in a matrix
+    int max_row = grid.size(), max_col = grid[0].size();
+    while (!q.empty())
     {
-      q.push({ row, 0 });
-      visited[row][0] = 1;
-    }
-    if (store[row][ini_col - 1])
-    {
-      q.push({ row, ini_col - 1 });
-      visited[row][ini_col] = 1;
-    }
-  }
-  for (int col = 1; col < ini_col - 2; col++)
-  {
-    if (store[0][col])
-    {
-      q.push({ 0, col });
-      visited[0][col] = 1;
-    }
-    if (store[ini_row - 1][col])
-    {
-      q.push({ ini_row - 1, col });
-      visited[ini_row - 1][col] = 1;
-    }
-  }
-  while (!q.empty())
-  {
-    int row = q.front().first, col = q.front().second;
-    q.pop();
-    for (int i = 0; i < 4; i++)
-    {
-      int n_row = row + arr_row[i], n_col = col + arr_col[i];
-      if (n_row >= 0 && n_row < ini_row && n_col >= 0 && n_col < ini_col && !visited[n_row][n_col] && store[n_row][n_col])
+      int row = q.front().first, col = q.front().second;
+      q.pop();
+      for (int i = 0; i < 4; i++)  // try in all four direction
       {
-        q.push({ n_row, n_col });
-        visited[n_row][n_col] = 1;
+        int n_row = row + arr_row[i], n_col = col + arr_col[i];
+        if (n_row >= 0 && n_row < max_row && n_col >= 0 && n_col < max_col && grid[n_row][n_col] && !visited[n_row][n_col])  // check if the index is in bound and if it is then check if there is land at that index and it is not already visited
+        {
+          visited[n_row][n_col] = 1;  // mark the land as visited we don't want to visit here again
+          q.push({ n_row, n_col });  // push in queue will traverse from there later
+        }
       }
     }
   }
-  for (int row = 0; row < ini_row; row++)
+
+  int numberOfEnclaves(vector<vector<int>>& grid)
   {
-    for (int col = 0; col < ini_col; col++)
+    int ip_row = grid.size(), ip_col = grid[0].size();
+    queue<pair<int, int>> q;
+    vector<vector<int>> visited(ip_row, vector<int>(ip_col, 0));
+    // we only take the land at the edges because if we want to jump of the edge we have to reach the land at the edge for that we check for any land that is connected to the edge by performing a bfs/dfs from the land at the edge
+    for (int i = 0; i < ip_row; i++)  // traverse only the edge of the matrix the two horizontal sides
     {
-      if (store[row][col] && !visited[row][col])
+      if (!visited[i][0] && grid[i][0])
       {
-        count++;
+        q.push({ i, 0 });  // add these indexes to perform bfs from
+        visited[i][0] = 1;
+      }
+      if (!visited[i][ip_col - 1] && grid[i][ip_col - 1])
+      {
+        q.push({ i, ip_col - 1 });  // add these indexes to perform bfs from
+        visited[i][ip_col - 1] = 1;
       }
     }
+
+    for (int i = 0; i < ip_col; i++)  // traverse only the edge of the matrix only the two vertical sides
+    {
+      if (!visited[0][i] && grid[0][i])
+      {
+        q.push({ 0, i });  // add these indexes to perform bfs from
+        visited[0][i] = 1;
+      }
+      if (!visited[ip_row - 1][i] && grid[ip_row - 1][i])
+      {
+        q.push({ ip_row - 1, i });  // add these indexes to perform bfs from
+        visited[ip_row - 1][i] = 1;
+      }
+    }
+    BFS(grid, visited, q);
+    int count{};
+    for (int i = 0; i < ip_row; i++)
+    {
+      for (int j = 0; j < ip_col; j++)
+      {
+        if (!visited[i][j] && grid[i][j])  // if the land is not visited then it means there is no way the land connects to the edge of the matrix so this land is an enclave
+        {
+          count++;
+        }
+      }
+    }
+    return count;
   }
-  return count;
-}
+};
 
 int main()
 {
-  std::vector<std::vector<int>> store{ { 1, 0, 0, 0 }, { 1, 0, 1, 0 }, { 1, 1, 0, 0 }, { 0, 0, 1, 0 }, { 0, 1, 0, 0 } };
-  std::cout << Enclaves(store) << "\n";
-  return 0;
+  int n, m;
+  cin >> n >> m;
+  vector<vector<int>> grid(n, vector<int>(m));
+  for (int i = 0; i < n; i++)
+  {
+    for (int j = 0; j < m; j++)
+    {
+      cin >> grid[i][j];
+    }
+  }
+  Solution obj;
+  cout << obj.numberOfEnclaves(grid) << endl;
 }

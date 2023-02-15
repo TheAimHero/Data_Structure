@@ -26,7 +26,7 @@ void Topo_sort(vector<vector<int>> ip, vector<int>& visited, stack<int>& topo_st
       Topo_sort(ip, visited, topo_stack, i);
     }
   }
-  topo_stack.push(node);//Store in stack after the Topo_sort returns from the calls 
+  topo_stack.push(node);
 }
 
 int main()

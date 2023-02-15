@@ -28,11 +28,8 @@ void Depth_First_Traversal(vector<vector<int>> store, int start)
   {
     int temp = s.top();
     s.pop();
-    if (!visited[temp])
-    {
-      visited[temp] = 1;
-      cout << temp << " ";
-    }
+    visited[temp] = 1;
+    cout << temp << " ";
     for (auto i : store[temp])
     {
       if (!visited[i])
@@ -44,14 +41,14 @@ void Depth_First_Traversal(vector<vector<int>> store, int start)
 }
 void Depth_First_Traversal_R(vector<vector<int>> store, int start)
 {
-  static vector<int> visited(store.size(), 0);
+  static vector<int> visited(store.size(), 0);  // track the visited nodes so they are not visited again if a cycle exist
   cout << start << " ";
   visited[start] = 1;
   for (auto i : store[start])
   {
     if (!visited[i])
     {
-      Depth_First_Traversal_R(store, i);
+      Depth_First_Traversal_R(store, i);  // To traverse all the adjacent nodes
     }
   }
 }

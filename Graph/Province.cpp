@@ -1,5 +1,5 @@
 /* Province :
-  If by being on a particular node we can traverse on every other node then those nodes are called as province. */
+  If by being on a particular node we can traverse on every other node then those nodes are called as a single province. */
 
 #include <iostream>
 #include <vector>
@@ -37,11 +37,11 @@ int main()
   cin >> node >> edges;
   vector<int> visited(node + 1, 0);
   vector<vector<int>> store = Adjacency_Matrix(node, edges);
-  for (int i = 1; i <= node; i++)
+  for (int i = 1; i <= node; i++)  // to traverse every node
   {
-    if (!visited[i])
+    if (!visited[i])  // perform dfs only if it is not visited in some other dfs call ie connected to some other node by being a part of the same province
     {
-      provinces++;
+      provinces++;  // the number of calls to the dfs represent the number of provinces
       Depth_First_Traversal_R(store, visited, 1);
     }
   }

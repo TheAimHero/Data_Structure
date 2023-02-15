@@ -3,7 +3,8 @@
 #include <queue>
 #include <utility>
 #include <vector>
-
+// find the time to rot all the oranges in the grid
+// if all the oranges could not be rot then return -1
 using namespace std;
 
 int Rot(vector<vector<int>>& store, int ini_row, int ini_col, int rotten)
@@ -40,7 +41,7 @@ int Rot(vector<vector<int>>& store, int ini_row, int ini_col, int rotten)
 
 int main()
 {
-  vector<vector<int>> store{ { 0, 1, 2 }, { 0, 1, 1 }, { 2, 1, 1 } };
+  vector<vector<int>> store{ { 0, 1, 2 }, { 0, 1, 1 }, { 2, 1, 1 } };  // 1 represent normal oranges and 2 represent rotten oranges
   int time = Rot(store, 0, 0, 2);
   for (auto i : store)
   {
