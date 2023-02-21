@@ -19,14 +19,14 @@ vector<vector<int>> Adj_list(int node, int edges)
 void Topo_sort(vector<vector<int>> ip, vector<int>& visited, stack<int>& topo_stack, int node)
 {
   visited[node] = 1;
-  for (auto i : ip[node])//Call for all the adjacent nodes
+  for (auto i : ip[node])  // Call for all the adjacent nodes
   {
-    if (!visited[i])
+    if (!visited[i])  // dont want to check the topo_sort for the same node many times
     {
       Topo_sort(ip, visited, topo_stack, i);
     }
   }
-  topo_stack.push(node);
+  topo_stack.push(node);  // push to stack
 }
 
 int main()

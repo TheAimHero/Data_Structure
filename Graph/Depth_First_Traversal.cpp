@@ -39,6 +39,7 @@ void Depth_First_Traversal(vector<vector<int>> store, int start)
     }
   }
 }
+
 void Depth_First_Traversal_R(vector<vector<int>> store, int start)
 {
   static vector<int> visited(store.size(), 0);  // track the visited nodes so they are not visited again if a cycle exist

@@ -50,14 +50,14 @@ int main()
   vector<vector<int>> ip = store_pair.second;
   vector<int> visited(node, 0), in_degree = store_pair.first;
   queue<int> q;
-  for (int i = 0; i < node; i++)
+  for (int i = 0; i < node; i++)  // start the scheduling from the nodes with in_degree zero that means that these nodes are not dependent on any other task
   {
     if (in_degree[i] == 0)
     {
       q.push(i);
     }
   }
-  int count = Topo_Sort(ip, in_degree, q, node);
+  int count = Topo_Sort(ip, in_degree, q, node);//gives the 
   if (count == node)
   {
     std::cout << "Task Can Be Performed" << std::endl;

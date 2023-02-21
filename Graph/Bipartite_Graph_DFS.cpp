@@ -1,52 +1,83 @@
-#include <iostream>
-#include <vector>
-
+#include <bits/stdc++.h>
+/*
+4 4
+0 2
+0 3
+1 3
+2 3
+*/
 using namespace std;
 
-vector<vector<int>> Adj_list(int node, int edges)
+class Solution
 {
-  int u, v;
-  vector<vector<int>> store(node);
-  for (int i = 0; i < edges; i++)
+  public:
+  bool Bipartite(vector<int> adj[], vector<int>& node_color, int node)
   {
-    cin >> u >> v;
-    store[u].push_back(v);
-    store[v].push_back(u);
+    queue<int> q;
+    q.push(node);
+    node_color[node] = 0;
+    while (!q.empty())
+    {
+      int current_node = q.front();
+      q.pop();
+      for (auto i : adj[current_node])
+      {
+        if (node_color[i] == -1)
+        {
+          node_color[i] = !node_color[current_node];
+          q.push(i);
+        }
+        else
+        {
+          if (node_color[i] == node_color[current_node])
+          {
+            return false;
+          }
+        }
+      }
+    }
+    return true;
   }
-  return store;
-}
 
-bool Bipartite(vector<vector<int>> ip, vector<int>& node_color, int node, int previous_color)
-{
-  node_color[node] = !previous_color;
-  for (auto i : ip[node])
+  bool isBipartite(int V, vector<int> adj[])
   {
-    if (node_color[i] == -1)
+    vector<int> node_color(V, -1);
+    for (int i = 0; i < V; i++)
     {
-      Bipartite(ip, node_color, i, node_color[node]);
+      if (node_color[i] == -1)
+      {
+        if (Bipartite(adj, node_color, i) == false)
+        {
+          return false;
+        }
+      }
     }
-    else if (node_color[i] == node_color[node])
-    {
-      return false;
-    }
+    return true;
   }
-  return true;
-}
+};
 
 int main()
 {
-  int node, edges;
-  cin >> node >> edges;
-  vector<vector<int>> ip = Adj_list(node, edges);
-  vector<int> node_color(node, -1);  // vector to keep track of all the node colors
-  for (int i = 0; i < node; i++)  // for loop to execute for all components if any
+  int tc;
+  cin >> tc;
+  while (tc--)
   {
-    if (Bipartite(ip, node_color, 0, 1) == false)  // check if the graph is proved not to be Bipartite already
+    int V, E;
+    cin >> V >> E;
+    vector<int> adj[V];
+    for (int i = 0; i < E; i++)
     {
-      cout << "Not Bipartite\n";
-      return 0;
+      int u, v;
+      cin >> u >> v;
+      adj[u].push_back(v);
+      adj[v].push_back(u);
     }
+    Solution obj;
+    bool ans = obj.isBipartite(V, adj);
+    if (ans)
+      cout << "1\n";
+    else
+      cout << "0\n";
   }
-  cout << "Bipartite";  // if all goes fine the graph is Bipartite
   return 0;
 }

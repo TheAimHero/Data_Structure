@@ -1,53 +1,66 @@
-#include <algorithm>
-#include <array>
-#include <iostream>
-#include <queue>
-#include <utility>
-#include <vector>
-
+#include <bits/stdc++.h>
 using namespace std;
-
-vector<vector<int>> Distance(vector<vector<int>>& store, int row, int col)
+/*
+3 4
+0 1 1 0
+1 1 0 0
+0 0 1 1
+*/
+class Solution
 {
-  vector<vector<int>> visited(store.size(), vector<int>(store[0].size()));
-  vector<vector<int>> distance_matrix(store.size(), vector<int>(store[0].size()));
-  queue<array<int, 3>> q;
-  for (int i = 0; i < store.size(); i++)
+  public:
+  vector<vector<int>> nearest(vector<vector<int>> grid)
   {
-    for (int j = 0; j < store[0].size(); j++)
-    {
-      if (store[i][j] == 1)
-      {
-        q.push({ i, j, 0 });
-        visited[i][j] = 1;
-      }
-    }
-  }
-  int arr_row[] = { -1, 0, +1, 0 }, arr_col[] = { 0, 1, 0, -1 };
-  while (!q.empty())
-  {
-    int row = q.front()[0], col = q.front()[1], distance = q.front()[2];
-    q.pop();
-    distance_matrix[row][col] = distance;
-    for (int i = 0; i < 4; i++)
-    {
-      int n_row = row + arr_row[i], n_col = col + arr_col[i];
-      if (n_row >= 0 && n_row < store.size() && n_col >= 0 && n_col < store[0].size() && !visited[n_row ][n_col])
-      {
-        q.push({ n_row, n_col, distance + 1 });
-        visited[n_row][n_col] = 1;
-      }
-    }
-  }
+    int max_row = grid.size(), max_col = grid[0].size(), row_arr[]{ -1, 0, 1, 0 }, col_arr[]{ 0, 1, 0, -1 };
+    vector<vector<int>> visited(max_row, vector<int>(max_col, 0)), distance(max_row, vector<int>(max_col, 1e9));
+    queue<array<int, 3>> q;  // stores --> row,col,distance
 
-  return distance_matrix;
-}
+    for (int row = 0; row < max_row; row++)
+    {
+      for (int col = 0; col < max_col; col++)
+      {
+        if (grid[row][col])
+        {
+          q.push({ row, col, 0 });
+          visited[row][col] = 1;
+          distance[row][col] = 0;
+        }
+      }
+    }
+    while (!q.empty())
+    {
+      int current_row = q.front()[0], current_col = q.front()[1], current_distance = q.front()[2];
+      q.pop();
+      for (int i = 0; i < 4; i++)
+      {
+        int n_row = current_row + row_arr[i], n_col = current_col + col_arr[i];
+        if (n_row >= 0 && n_col >= 0 && n_row < max_row && n_col < max_col && !visited[n_row][n_col])
+        {
+          q.push({ n_row, n_col, current_distance + 1 });
+          distance[n_row][n_col] = current_distance + 1;
+          visited[n_row][n_col] = 1;
+        }
+      }
+    }
+    return distance;
+  }
+};
 
 int main()
 {
-  vector<vector<int>> store = { { 0, 1, 0 }, { 0, 0, 1 }, { 0, 1, 0 } };
-  vector<vector<int>> distance_matrix = Distance(store, 0, 0);
-  for (auto i : distance_matrix)
+  int n, m;
+  cin >> n >> m;
+  vector<vector<int>> grid(n, vector<int>(m, -1));
+  for (int i = 0; i < n; i++)
+  {
+    for (int j = 0; j < m; j++)
+    {
+      cin >> grid[i][j];
+    }
+  }
+  Solution obj;
+  vector<vector<int>> ans = obj.nearest(grid);
+  for (auto i : ans)
   {
     for (auto j : i)
     {
@@ -55,5 +68,6 @@ int main()
     }
     cout << "\n";
   }
+
   return 0;
 }

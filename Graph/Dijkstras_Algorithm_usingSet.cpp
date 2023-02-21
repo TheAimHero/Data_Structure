@@ -31,6 +31,13 @@ class Solution
     return distance;
   }
 };
+4 5
+0 1 9
+0 2 1
+0 3 1
+1 3 3
+2 3 2
+0
 int main()
 {
   int V, E;

@@ -12,10 +12,10 @@ class Solution
     vector<int> distance(V, 1e9);
     priority_queue<pair<int, int>> pq;
     distance[S] = 0;
-    pq.push({ S, 0 });
+    pq.push({ 0, S });
     while (!pq.empty())
     {
-      int current = pq.top().first, current_distance = pq.top().second;
+      int current = pq.top().second, current_distance = pq.top().first;
       pq.pop();
       for (auto i : adj[current])
       {
@@ -23,7 +23,7 @@ class Solution
         if (distance[adj_node] > current_distance + weight)
         {
           distance[adj_node] = current_distance + weight;
-          pq.push({ adj_node, distance[adj_node] });
+          pq.push({ distance[adj_node], adj_node });
         }
       }
     }
