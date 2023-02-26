@@ -3,7 +3,12 @@
 
 #include <iostream>
 #include <vector>
-
+/*
+3
+1 0 1
+0 1 0
+1 0 1
+*/
 using namespace std;
 
 vector<vector<int>> Adjacency_Matrix(int node, int edges)

@@ -13,8 +13,8 @@ pair<vector<int>, vector<vector<int>>> Adj_list(int node, int edges)
   for (int i = 0; i < edges; i++)
   {
     cin >> u >> v;
-    store[u].push_back(v);
-    in_degree[v]++;
+    store[u].push_back(v);  // create a directed acyclic graph
+    in_degree[v]++;  // and calculate the in_degree of the nodes
   }
   pair<vector<int>, vector<vector<int>>> store_pair;
   store_pair.first = in_degree;
@@ -32,7 +32,8 @@ void Topo_Sort(vector<vector<int>> ip, vector<int>& in_degree, queue<int> q, int
     for (auto i : ip[current])
     {
       in_degree[i]--;
-      if (in_degree[i] == 0)
+      if (in_degree[i] == 0)  // if the in_degree is zero then push it in the queue
+      // push it into the queue means there are no more nodes that this node is not dependent on any of the other remaining nodes to get connected the graph
       {
         q.push(i);
       }
@@ -52,9 +53,8 @@ int main()
   {
     if (in_degree[i] == 0)
     {
-      q.push(i);
+      q.push(i);  // if the in_degree is zero then it means that the node is not dependent on any node to get access to the graph and can be pushed into the queue
     }
   }
   Topo_Sort(ip, in_degree, q, node);
-  
 }

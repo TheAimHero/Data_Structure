@@ -1,56 +1,77 @@
-#include <algorithm>
-#include <iostream>
-#include <queue>
-#include <utility>
-#include <vector>
-// find the time to rot all the oranges in the grid
-// if all the oranges could not be rot then return -1
+#include <bits/stdc++.h>
 using namespace std;
-
-int Rot(vector<vector<int>>& store, int ini_row, int ini_col, int rotten)
+/*
+10 9
+2 1 1 1 2 1 2 0 2
+1 2 1 1 2 1 1 2 2
+2 2 1 2 2 1 1 2 1
+1 0 2 0 1 2 2 1 0
+2 0 0 2 2 2 2 0 2
+2 1 1 1 2 0 2 1 2
+2 2 1 1 0 0 1 2 2
+0 2 0 2 2 2 2 2 1
+2 0 2 0 1 2 2 2 2
+1 1 1 2 0 1 2 2 2
+3
+*/
+class Solution
 {
-  queue<vector<int>> q;
-  for (int i = 0; i < store.size(); i++)
+  public:
+  int orangesRotting(vector<vector<int>>& grid)  // changing the grid array in place
   {
-    for (int j = 0; j < store[0].size(); j++)
+    queue<pair<pair<int, int>, int>> q;  //{ {row,col},time }
+    int fresh_count{}, max_row = grid.size(), max_col = grid[0].size(), max_time{}, row_arr[]{ -1, 0, 1, 0 }, col_arr[]{ 0, 1, 0, -1 };
+    for (int row = 0; row < max_row; row++)
     {
-      if (j == 2)
+      for (int col = 0; col < max_col; col++)
       {
-        q.push({ i, j, 0 });
+        if (grid[row][col] == 2)
+        {
+          q.push({ { row, col }, 0 });  // if the orange at the position is rotten then mark the position as a starting point for the bfs algorithm by pushing it in the queue
+        }
+        else if (grid[row][col] == 1)  // if the orange is fresh then increase the fresh_count
+        {
+          fresh_count++;
+        }
       }
     }
-  }
-  int arr_row[]{ -1, 0, 1, 0 }, arr_col[]{ 0, 1, 0, -1 }, max_time{};
-  while (!q.empty())
-  {
-    int row = q.front()[0], col = q.front()[1], time = q.front()[2];
-    max_time = max_time >= time ? max_time : time;
-    q.pop();
-    for (int i = 0; i < 4; i++)
+    while (!q.empty())
     {
-      int n_row = row + arr_row[i], n_col = col + arr_col[i];
-      if (n_row >= 0 && n_row < store.size() && n_col >= 0 && n_col < store[0].size() && store[n_row][n_col] == 1)
+      pair<pair<int, int>, int> current = q.front();
+      int current_row = current.first.first, current_col = current.first.second, current_time = current.second;
+      q.pop();
+      for (int i = 0; i < 4; i++)  // traverse over all the adjacent position in the matrix
       {
-        q.push({ n_row, n_col, time += 1 });
-        store[n_row][n_col] = rotten;
+        int n_row = current_row + row_arr[i], n_col = current_col + col_arr[i];  // calculate the neighbouring indexes
+        if (n_row >= 0 && n_col >= 0 && n_row < max_row && n_col < max_col && grid[n_row][n_col] == 1)  // check the neighbouring indexes are in bounds or not
+        {
+          fresh_count--;  // if the node can be reached during the bfs then reduce the fresh orange count
+          q.push({ { n_row, n_col }, current_time + 1 });  // mark the orange as rotten and push it in the queue to mark it as a starting point for the bfs
+          grid[n_row][n_col] = 2;  // mark the orange as rotten at that position
+        }
+        max_time = max(max_time, current_time);  // calculate the max_time it took to rot the orange (if they can be rot)
       }
     }
+    return fresh_count ? max_time : -1;  // return the max_time only if all the oranges were rotten if not return -1
+                                         // we can find out if all the oranges are rotten by looking at the fresh_count if it is zero then all the oranges are rotten
   }
-  return max_time;
-}
+};
 
 int main()
 {
-  vector<vector<int>> store{ { 0, 1, 2 }, { 0, 1, 1 }, { 2, 1, 1 } };  // 1 represent normal oranges and 2 represent rotten oranges
-  int time = Rot(store, 0, 0, 2);
-  for (auto i : store)
+  int n, m;
+  cin >> n >> m;
+  vector<vector<int>> grid(n, vector<int>(m, -1));
+  for (int i = 0; i < n; i++)
   {
-    for (auto j : i)
+    for (int j = 0; j < m; j++)
     {
-      cout << j << " ";
+      cin >> grid[i][j];
     }
-    cout << "\n";
   }
-  cout << time << "\n";
+  Solution obj;
+  int ans = obj.orangesRotting(grid);
+  cout << ans << "\n";
+
   return 0;
 }
