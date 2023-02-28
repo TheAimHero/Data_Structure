@@ -9,12 +9,11 @@ class Solution
 {
   public:
   vector<int> Order(
-    vector<vector<int>> ip,
-    vector<int>& in_order,
-    queue<int>& q,
-    vector<int>& ans,
-    int node
-  )
+      vector<vector<int>> ip,
+      vector<int>& in_order,
+      queue<int>& q,
+      vector<int>& ans,
+      int node)
   {
     while (!q.empty())
     {
