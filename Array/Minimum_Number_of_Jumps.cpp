@@ -1,5 +1,7 @@
 #include <bits/stdc++.h>
 
+using namespace std;
+
 class Solution {
 public:
   int minJumps(int arr[], int n) {
@@ -28,7 +30,7 @@ public:
       // Update the maxReach to the to the max index we can reach with the
       // numbers that lie between the previous index where we begun till where
       // we can reach till
-      maxReach = std::max(maxReach, i + arr[i]);
+      maxReach = max(maxReach, i + arr[i]);
       // since we have taken a step to reach the index decrement it
       steps--;
       if (steps == 0) {
